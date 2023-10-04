@@ -48,7 +48,6 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
         }
 
     def process(self, pp: scripts_postprocessing.PostprocessedImage, model, return_mask, alpha_matting, alpha_matting_foreground_threshold, alpha_matting_background_threshold, alpha_matting_erode_size):
-        print('HERE', model)
         if not model or model == "None":
             return
 

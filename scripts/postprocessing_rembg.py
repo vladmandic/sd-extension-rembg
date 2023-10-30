@@ -2,7 +2,7 @@ import os
 import gradio as gr
 import rembg
 from modules import scripts_postprocessing
-from modules.paths_internal import models_path
+from modules.paths import models_path
 from modules.ui_components import FormRow
 
 models = [

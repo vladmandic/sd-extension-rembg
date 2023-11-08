@@ -47,7 +47,7 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
         if not model or model == "None":
             return
         if "U2NET_HOME" not in os.environ:
-            os.environ["U2NET_HOME"] = os.path.join(models_path, "rembg")
+            os.environ["U2NET_HOME"] = os.path.join(models_path, "Rembg")
         args = {
             'data': pp.image,
             'only_mask': only_mask,

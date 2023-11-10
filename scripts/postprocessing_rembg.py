@@ -1,9 +1,18 @@
 import os
 import gradio as gr
-import rembg
 from modules import scripts_postprocessing
 from modules.paths import models_path
 from modules.ui_components import FormRow
+from modules.shared import log
+
+
+ok = True
+try:
+    import rembg
+except Exception as e:
+    print(f'Rembg load failed: {e}')
+    ok = False
+
 
 models = [
     "None",
@@ -23,6 +32,8 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
     model = None
 
     def ui(self):
+        if not ok:
+            return {}
         with FormRow():
             model = gr.Dropdown(label="Model", choices=models, value="None")
             only_mask = gr.Checkbox(label="Return mask", value=False)
@@ -44,7 +55,7 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
         }
 
     def process(self, pp: scripts_postprocessing.PostprocessedImage, model, only_mask, postprocess_mask, alpha_matting, alpha_matting_foreground_threshold, alpha_matting_background_threshold, alpha_matting_erode_size): # pylint: disable=arguments-differ
-        if not model or model == "None":
+        if not model or model == "None" or not ok:
             return
         if "U2NET_HOME" not in os.environ:
             os.environ["U2NET_HOME"] = os.path.join(models_path, "Rembg")

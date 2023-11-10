@@ -3,7 +3,6 @@ import gradio as gr
 from modules import scripts_postprocessing
 from modules.paths import models_path
 from modules.ui_components import FormRow
-from modules.shared import log
 
 
 ok = True

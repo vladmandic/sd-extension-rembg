@@ -1,14 +1,7 @@
 from fastapi import FastAPI, Body
-from modules.api.models import *
-from modules.api import api
 import gradio as gr
-
-
-ok = True
-try:
-    import rembg
-except Exception:
-    ok = False
+from modules.api import api
+from installer import installed
 
 
 def rembg_api(_: gr.Blocks, app: FastAPI):
@@ -22,6 +15,10 @@ def rembg_api(_: gr.Blocks, app: FastAPI):
         alpha_matting_background_threshold: int = Body(10, title='alpha matting background threshold'),
         alpha_matting_erode_size: int = Body(10, title='alpha matting erode size')
     ):
+        try:
+            import rembg
+        except Exception:
+            return
         if not model or model == "None":
             return
         input_image = api.decode_base64_to_image(input_image)
@@ -37,7 +34,7 @@ def rembg_api(_: gr.Blocks, app: FastAPI):
         return {"image": api.encode_pil_to_base64(image).decode("utf-8")}
 
 try:
-    if ok:
+    if installed('rembg', reload=False, quiet=True):
         import modules.script_callbacks as script_callbacks
         script_callbacks.on_app_started(rembg_api)
 except:

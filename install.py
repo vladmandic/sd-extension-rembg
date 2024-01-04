@@ -1,8 +1,7 @@
-import launch
+# sdnext installer
+import installer
 
-if not launch.is_installed("rembg"):
-    launch.run_pip("install rembg --no-deps", "rembg")
-
-for dep in ['onnxruntime', 'pymatting', 'pooch']:
-    if not launch.is_installed(dep):
-        launch.run_pip(f"install {dep}", f"{dep}")
+dependencies = ['onnxruntime', 'pymatting', 'pooch']
+for dependency in dependencies:
+    if not installer.installed(dependency, reload=False, quiet=True):
+        installer.install(dependency, ignore=False)

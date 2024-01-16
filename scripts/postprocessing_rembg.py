@@ -9,11 +9,11 @@ models = [
     "None",
     "silueta",
     "u2net",
-    # "u2netp",
     "u2net_human_seg",
-    # "u2net_cloth_seg",
     "isnet-general-use",
     "isnet-anime",
+    # "u2netp",
+    # "u2net_cloth_seg",
     # "sam",
 ]
 

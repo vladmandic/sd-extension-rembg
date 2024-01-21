@@ -2,7 +2,6 @@ import os
 import gradio as gr
 from modules import scripts_postprocessing
 from modules.paths import models_path
-from modules.ui_components import FormRow
 
 
 models = [
@@ -23,12 +22,12 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
     model = None
 
     def ui(self):
-        with FormRow():
+        with gr.Row():
             model = gr.Dropdown(label="Model", choices=models, value="None")
             only_mask = gr.Checkbox(label="Return mask", value=False)
             postprocess_mask = gr.Checkbox(label="Postprocess mask", value=False)
             alpha_matting = gr.Checkbox(label="Alpha matting", value=True)
-        with FormRow(visible=True) as alpha_mask_row:
+        with gr.Row(visible=True) as alpha_mask_row:
             alpha_matting_erode_size = gr.Slider(label="Erode size", minimum=0, maximum=40, step=1, value=10)
             alpha_matting_foreground_threshold = gr.Slider(label="Foreground threshold", minimum=0, maximum=255, step=1, value=240)
             alpha_matting_background_threshold = gr.Slider(label="Background threshold", minimum=0, maximum=255, step=1, value=10)

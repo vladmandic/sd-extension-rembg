@@ -2,6 +2,7 @@ import os
 import gradio as gr
 from modules import scripts_postprocessing
 from modules.paths import models_path
+from modules import shared
 
 
 models = [
@@ -15,6 +16,14 @@ models = [
     # "u2net_cloth_seg",
     # "sam",
 ]
+
+
+def dependencies():
+    import installer
+    for pkg in ['pymatting', 'pooch', 'rembg']:
+        if not installer.installed(pkg):
+            installer.install(pkg, ignore=False)
+
 
 class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
     name = "Rembg"
@@ -43,10 +52,11 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
         }
 
     def process(self, pp: scripts_postprocessing.PostprocessedImage, model, only_mask, postprocess_mask, alpha_matting, alpha_matting_foreground_threshold, alpha_matting_background_threshold, alpha_matting_erode_size): # pylint: disable=arguments-differ
+        dependencies()
         try:
             import rembg
         except Exception as e:
-            print(f'Rembg load failed: {e}')
+            shared.log.error(f'Rembg load failed: {e}')
             return
         if not model or model == "None":
             return

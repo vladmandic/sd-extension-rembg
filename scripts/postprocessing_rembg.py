@@ -26,7 +26,7 @@ def dependencies():
 
 
 class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
-    name = "Rembg"
+    name = "Remove background"
     order = 20000
     model = None
 

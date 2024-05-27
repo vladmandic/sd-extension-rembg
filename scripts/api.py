@@ -37,5 +37,5 @@ try:
     if installed('rembg', reload=False, quiet=True):
         import modules.script_callbacks as script_callbacks
         script_callbacks.on_app_started(rembg_api)
-except:
+except Exception:
     pass

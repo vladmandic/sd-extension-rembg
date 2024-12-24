@@ -31,25 +31,26 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
     model = None
 
     def ui(self):
-        with gr.Row():
-            model = gr.Dropdown(label="Model", choices=models, value="None", elem_id="extras_rembg_model")
-            only_mask = gr.Checkbox(label="Return mask", value=False, elem_id="extras_rembg_only_mask")
-            postprocess_mask = gr.Checkbox(label="Postprocess mask", value=False, elem_id="extras_rembg_process_mask")
-            alpha_matting = gr.Checkbox(label="Alpha matting", value=True, elem_id="extras_rembg_alpha")
-        with gr.Row(visible=True) as alpha_mask_row:
-            alpha_matting_erode_size = gr.Slider(label="Erode size", minimum=0, maximum=40, step=1, value=10, elem_id="extras_rembg_alpha_erode")
-            alpha_matting_foreground_threshold = gr.Slider(label="Foreground threshold", minimum=0, maximum=255, step=1, value=240, elem_id="extras_rembg_alpha_foreground")
-            alpha_matting_background_threshold = gr.Slider(label="Background threshold", minimum=0, maximum=255, step=1, value=10, elem_id="extras_rembg_alpha_background")
-        alpha_matting.change(fn=lambda x: gr.update(visible=x), inputs=[alpha_matting], outputs=[alpha_mask_row])
-        return {
-            "model": model,
-            "only_mask": only_mask,
-            "postprocess_mask": postprocess_mask,
-            "alpha_matting": alpha_matting,
-            "alpha_matting_foreground_threshold": alpha_matting_foreground_threshold,
-            "alpha_matting_background_threshold": alpha_matting_background_threshold,
-            "alpha_matting_erode_size": alpha_matting_erode_size,
-        }
+        with gr.Accordion('Remove background', open = False):
+            with gr.Row():
+                model = gr.Dropdown(label="Model", choices=models, value="None", elem_id="extras_rembg_model")
+                only_mask = gr.Checkbox(label="Return mask", value=False, elem_id="extras_rembg_only_mask")
+                postprocess_mask = gr.Checkbox(label="Postprocess mask", value=False, elem_id="extras_rembg_process_mask")
+                alpha_matting = gr.Checkbox(label="Alpha matting", value=True, elem_id="extras_rembg_alpha")
+            with gr.Row(visible=True) as alpha_mask_row:
+                alpha_matting_erode_size = gr.Slider(label="Erode size", minimum=0, maximum=40, step=1, value=10, elem_id="extras_rembg_alpha_erode")
+                alpha_matting_foreground_threshold = gr.Slider(label="Foreground threshold", minimum=0, maximum=255, step=1, value=240, elem_id="extras_rembg_alpha_foreground")
+                alpha_matting_background_threshold = gr.Slider(label="Background threshold", minimum=0, maximum=255, step=1, value=10, elem_id="extras_rembg_alpha_background")
+            alpha_matting.change(fn=lambda x: gr.update(visible=x), inputs=[alpha_matting], outputs=[alpha_mask_row])
+            return {
+                "model": model,
+                "only_mask": only_mask,
+                "postprocess_mask": postprocess_mask,
+                "alpha_matting": alpha_matting,
+                "alpha_matting_foreground_threshold": alpha_matting_foreground_threshold,
+                "alpha_matting_background_threshold": alpha_matting_background_threshold,
+                "alpha_matting_erode_size": alpha_matting_erode_size,
+            }
 
     def process(self, pp: scripts_postprocessing.PostprocessedImage, model, only_mask, postprocess_mask, alpha_matting, alpha_matting_foreground_threshold, alpha_matting_background_threshold, alpha_matting_erode_size): # pylint: disable=arguments-differ
         dependencies()

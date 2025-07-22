@@ -30,7 +30,7 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
         def visible(model):
             return gr.update(visible=model not in ["none"]), gr.update(visible=model in ["ben2"]), gr.update(visible=model not in ["none", "ben2"])
 
-        with gr.Accordion('Remove background', open = True):
+        with gr.Accordion('Remove background', open = True, elem_id="postprocess_rembg_accordion"):
             with gr.Row():
                 model = gr.Dropdown(label="Model", choices=models, value="none", elem_id="extras_rembg_model")
             with gr.Group(visible=False) as group_base:

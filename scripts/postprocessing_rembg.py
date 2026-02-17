@@ -80,9 +80,10 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
                 return pp
         else:
             try:
-                import installer
+                from installer import install
+                install('dctorch==0.1.2', no_deps=True, quiet=True)
                 for pkg in ['pymatting', 'pooch', 'rembg']:
-                    installer.install(pkg, ignore=False)
+                    install(pkg, ignore=False)
                 import rembg
                 if "U2NET_HOME" not in os.environ:
                     os.environ["U2NET_HOME"] = os.path.join(models_path, "Rembg")

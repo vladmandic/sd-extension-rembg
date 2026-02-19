@@ -43,7 +43,7 @@ def rembg_api(_: gr.Blocks, app: FastAPI):
         return {"image": api.encode_pil_to_base64(image).decode("utf-8")}
 
 try:
-    if installed('rembg', reload=False, quiet=True):
+    if installed('rembg', quiet=True):
         import modules.script_callbacks as script_callbacks
         script_callbacks.on_app_started(rembg_api)
 except Exception:

@@ -3,7 +3,6 @@ import gradio as gr
 from PIL import Image
 from modules import scripts_postprocessing
 from modules.paths import models_path
-from modules import shared
 import ben2 # pylint: disable=wrong-import-order
 
 
@@ -76,7 +75,8 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
             try:
                 image = ben2.remove(image, refine=refine)
             except Exception as e:
-                shared.log.error(f'RemoveBackground: model={model} {e}')
+                from modules.logger import log
+                log.error(f'RemoveBackground: model={model} {e}')
                 return pp
         else:
             try:
@@ -95,7 +95,8 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
                                     alpha_matting_erode_size=alpha_matting_erode_size,
                                     session=rembg.new_session(model))
             except Exception as e:
-                shared.log.error(f'RemoveBackground: model={model} {e}')
+                from modules.logger import log
+                log.error(f'RemoveBackground: model={model} {e}')
                 return pp
 
         if mask_only and pp.image.mode == "RGBA":

@@ -62,6 +62,7 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
             }
 
     def process(self, pp: scripts_postprocessing.PostprocessedImage, model, merge_alpha, refine, mask_only, postprocess_mask, alpha_matting, alpha_matting_foreground_threshold, alpha_matting_background_threshold, alpha_matting_erode_size): # pylint: disable=arguments-differ
+        from modules.logger import log
         if not model or model == "none":
             return pp
         if isinstance(pp, Image.Image):
@@ -71,19 +72,18 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
             image = pp.image
             info = pp.info
 
+        log.info(f'RemoveBackground: model={model} merge_alpha={merge_alpha} refine={refine} mask_only={mask_only} postprocess_mask={postprocess_mask} alpha_matting={alpha_matting} alpha_matting_foreground_threshold={alpha_matting_foreground_threshold} alpha_matting_background_threshold={alpha_matting_background_threshold} alpha_matting_erode_size={alpha_matting_erode_size}')
         if model == 'ben2':
             try:
                 image = ben2.remove(image, refine=refine)
             except Exception as e:
-                from modules.logger import log
                 log.error(f'RemoveBackground: model={model} {e}')
                 return pp
         else:
             try:
                 from installer import install
-                install('dctorch==0.1.2', no_deps=True, quiet=True)
-                for pkg in ['pymatting', 'pooch', 'rembg']:
-                    install(pkg, ignore=False)
+                for pkg in ["dctorch==0.1.2", "pymatting", "pooch", "rembg"]:
+                    install(pkg, no_deps=True, ignore=False)
                 import rembg
                 if "U2NET_HOME" not in os.environ:
                     os.environ["U2NET_HOME"] = os.path.join(models_path, "Rembg")
@@ -95,7 +95,6 @@ class ScriptPostprocessingUpscale(scripts_postprocessing.ScriptPostprocessing):
                                     alpha_matting_erode_size=alpha_matting_erode_size,
                                     session=rembg.new_session(model))
             except Exception as e:
-                from modules.logger import log
                 log.error(f'RemoveBackground: model={model} {e}')
                 return pp
 
